@@ -1,10 +1,12 @@
 const playersInput = document.getElementById("players");
 const entryInput = document.getElementById("entry");
 const feeInput = document.getElementById("fee");
+const winnersPercentInput = document.getElementById("winnersPercent");
 
 playersInput.addEventListener("input", render);
 entryInput.addEventListener("input", render);
 feeInput.addEventListener("input", render);
+winnersPercentInput.addEventListener("input", render);
 
 function render() {
   const players = Math.max(1, Number(playersInput.value));
@@ -14,7 +16,8 @@ function render() {
   const poolTotal = players * entry;
   const taxa = poolTotal * fee;
   const poolDistribuivel = poolTotal - taxa;
-  const winners = Math.max(1, Math.ceil(players * 0.10));
+  const winnersPercent = Math.min(100, Math.max(1, Number(winnersPercentInput.value)));
+  const winners = Math.max(1, Math.ceil(players * (winnersPercent / 100)));
 
   document.getElementById("poolTotal").innerText =
     `R$ ${poolTotal.toFixed(2)}`;
