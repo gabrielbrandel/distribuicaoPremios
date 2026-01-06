@@ -45,20 +45,7 @@ function renderPercentual(pool, winners) {
     </tr>
   `;
 
-  // Gera pesos decrescentes (ex: 5,4,3,2,1)
-  let pesos = [];
-  for (let i = winners; i >= 1; i--) {
-    pesos.push(i);
-  }
-
-  // Aumenta peso do topo (top-heavy)
-  pesos[0] *= 2;           // 1º mais forte
-  if (pesos.length > 1) {
-    pesos[1] *= 1.4;       // 2º
-  }
-  if (pesos.length > 2) {
-    pesos[2] *= 1.2;       // 3º
-  }
+  let pesos = gerarPesos(winners);
 
   const somaPesos = pesos.reduce((a, b) => a + b, 0);
 
@@ -80,6 +67,50 @@ function renderPercentual(pool, winners) {
   totalEl.innerText =
     `Total distribuído: R$ ${totalDistribuido.toFixed(2)}`;
 }
+
+function gerarPesos(winners, config = {}) {
+  const {
+    fatorPrimeiro = 3.0,
+    fatorSegundo = 1.8,
+    fatorDecaimento = 0.85,
+    pesoMinimo = 0.03232 // <<< PISO
+  } = config;
+
+  let pesos = [];
+
+  // Peso base (3º lugar como referência)
+  const pesoBase =
+    winners >= 3 ? 1 :
+      winners === 2 ? 0.8 :
+        0.6;
+
+  for (let i = 0; i < winners; i++) {
+    let peso;
+
+    if (i === 0) {
+      peso = pesoBase * fatorPrimeiro;
+    } else if (i === 1) {
+      peso = pesoBase * fatorSegundo;
+    } else if (i === 2) {
+      peso = pesoBase;
+    } else {
+      peso = pesos[i - 1] * fatorDecaimento;
+    }
+
+    // 👉 aplica peso mínimo
+    peso = Math.max(peso, pesoMinimo);
+
+    pesos.push(peso);
+  }
+
+  // 🔁 Renormaliza para manter proporção correta
+  const soma = pesos.reduce((a, b) => a + b, 0);
+  pesos = pesos.map(p => p / soma);
+
+  return pesos; // agora somam 1 (100%)
+}
+
+
 
 
 /* =========================
