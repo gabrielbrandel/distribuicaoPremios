@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Simulador de Distribuição de Prêmios</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <h1>Simulador de Distribuição de Prêmios</h1>
+
+  <section class="explanation">
+    <h2>Como funcionam os modelos de premiação</h2>
+
+    <p>
+      Este simulador apresenta <strong>dois modelos diferentes de distribuição de prêmios</strong>,
+      ambos respeitando as seguintes regras:
+    </p>
+
+    <ul>
+      <li>Apenas <strong>10% dos participantes</strong> são premiados</li>
+      <li>Uma <strong>taxa fixa da casa</strong> é descontada do valor total arrecadado</li>
+    </ul>
+
+    <h3>🔵 Modelo 1 — Percentual</h3>
+    <p>
+      Neste modelo, os prêmios são definidos a partir de <strong>percentuais do montante distribuível</strong>.
+      O primeiro lugar recebe a maior fatia, enquanto os demais prêmios são distribuídos de forma decrescente,
+      concentrando o valor principalmente entre os <strong>Top 5 e Top 10</strong>.
+      
+      <li>Prêmio = pool × Percentual</li>
+    </p>
+
+    <h3>🟢 Modelo 2 — Multiplicador</h3>
+    <p>
+      Neste modelo, cada colocação possui um <strong>multiplicador do valor da inscrição</strong>.
+      Os valores finais são ajustados automaticamente para respeitar o montante total disponível,
+      mantendo uma progressão clara e fácil de entender.
+
+      <li>Prêmio = pool × (peso / soma_dos_pesos)</li>
+
+    </p>
+  </section>
+
+  <section class="inputs">
+    <label>
+      Participantes
+      <input type="number" id="players" value="50" min="1">
+    </label>
+
+    <label>
+      Valor da inscrição (R$)
+      <input type="number" id="entry" value="20" step="0.01">
+    </label>
+
+    <label>
+      Taxa da casa (%)
+      <input type="number" id="fee" value="25">
+    </label>
+    <section class="info">
+      <div><strong>Pool Total:</strong> <span id="poolTotal"></span></div>
+      <div><strong>Taxa da Casa:</strong> <span id="taxaCasa"></span></div>
+      <div><strong>Pool Distribuível:</strong> <span id="poolDistribuivel"></span></div>
+    </section>
+  </section>
+
+  <h2>🔵 Modelo 1 — Percentual</h2>
+  <table id="tablePercentual"></table>
+  <p id="totalPercentual" class="totalizador"></p>
+
+  <h2>🟢 Modelo 2 — Pesos</h2>
+  <table id="tableMultiplicador"></table>
+  <p id="totalMultiplicador" class="totalizador"></p>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
